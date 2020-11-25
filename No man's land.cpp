@@ -1,5 +1,5 @@
-#include <SFML\Graphics.hpp>
-#include <SFML\Audio.hpp>
+#include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <random>
 #include <ctime>
 #include <math.h>
@@ -7,6 +7,7 @@
 #include "Special.h"
 #include "rocket.h"
 #include "pause.h"
+#include "Textbox.h"
 
 int Enemy(int x);
 bool distance(float x1, float x2, float y1, float y2);
@@ -58,7 +59,7 @@ int main()
 	plat.setTextureRect(sf::IntRect(2,3,114,29));
 
 	sf::Texture Tenemy;
-	Tenemy.loadFromFile("pic/game-tiles-jungle@2x.png");
+	Tenemy.loadFromFile("pic/ani.png");
 	sf::Sprite enemy;
 	enemy.setTexture(Tenemy);
 	enemy.setTextureRect(sf::IntRect(620, 0, 151, 90));
@@ -127,8 +128,22 @@ int main()
 	shootSound.setBuffer(bshoot);
 	shootSound.setVolume(25);
 
+	sf::SoundBuffer bEnde;
+	bEnde.loadFromFile("sound/monster-crash.wav");
+	sf::Sound Ende;
+	Ende.setBuffer(bEnde);
+	Ende.setVolume(5);
+	//backgroud music
+	sf::Music bgMusic;
+	bgMusic.openFromFile("sound/bgMusic.wav");
+	bgMusic.setLoop(true);
+	bgMusic.setVolume(5);
+	bgMusic.play();
+
+
 	// initialize platforms
 	sf::Vector2i platformPosition[10];
+	sf::Vector2i platformPositionForReturn[10];
 	std::uniform_int_distribution<int> x(0, 640-114);
 	std::uniform_int_distribution<int> y(-25, 800);
 	//std::uniform_int_distribution<int> k(-4, 0);
@@ -150,6 +165,9 @@ int main()
 	int specialJump = 3;
 	int rocketPos;
 	bool rocketTemp=0;
+	int allMove[10];
+	bool allMoveTemp = 0;
+	bool platReturn = 0;
 	struct pos {
 		int x;
 		int y;
@@ -162,6 +180,9 @@ int main()
 	movePlat.temp = -1;
 	movePlat.built = 0;
 	movePlat.move = -10;
+	sf::Clock enClock;
+	sf::Time enTime;
+	int enFrame = 0;
 	//enemy
 	struct sEnemy {
 		sf::Vector2u enemyPos;
@@ -189,6 +210,8 @@ int main()
 		}
 	}
 
+	
+
 	treeL.setPosition(0,1024);
 	treeR.setPosition(640, 1024);
 
@@ -215,39 +238,33 @@ int main()
 		}
 		if (fromMenu == 0) {
 			window.setMouseCursorVisible(true);
+			allMoveTemp = 0;
 			fromMenu = menu(window);
 			returnToGame = 1;
 		}
-		if (returnToGame == 1) {
-			playerX = 450;
-			playerY = 151;
-			dy = 0;
-			gravity = 0.2;
-			score = 0;
-			temp = false;
-			gameOver = 0;
-			returnToGame = 0;
-			specialJump = 3;
-			platformPosition[9] = { 640/2 , 880 };
-			en.built = false;
-			for (i = 1; i < 9; i++) {
-				temp = false;
-				while (temp != true) {
-					platformPosition[i].y = setY(score, i);
-					platformPosition[i].x = x(e);
-					for (j = 0; j < i; j++) {
-						temp = distance(platformPosition[i].x, platformPosition[j].x, platformPosition[i].y, platformPosition[j].y);
-						if (temp == false) {
-							break;
-						}
-					}
-				}
-			}
-		}
+		
 		window.setMouseCursorVisible(false);
 
 		window.draw(Background);
+		//Animation
+
+		enTime = enClock.getElapsedTime();
+		if (enTime.asSeconds() > 0.01f) {
+			if (enFrame <= 4) {
+				enemy.setTextureRect(sf::IntRect(enFrame * 149, 0, 149, 90));
+				enFrame++;
+				if (enFrame == 4) {
+					enFrame = 0;
+				}
+			}
+			enClock.restart();
+		}
+
+
 		float vecol;
+
+
+
 		//sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 		//vecol = (mousePos.x - 640/2) / 12;
 		/*if (playerX > -51 && playerX < 692) {
@@ -331,8 +348,8 @@ int main()
 				break;
 			}
 		}
-
-		for (i = 0; i < 10 && movePlat.built == 0; i++) {
+		//moving plat
+		for (i = 0; i < 10 && movePlat.built == 0 && score < 1000; i++) {
 			
 			if (platformPosition[i].x > 0 && platformPosition[i].x < 100 && platformPosition[i].y < 10) {
 				movePlat.temp = i;
@@ -357,6 +374,40 @@ int main()
 		if (movePlat.temp == bo.temp) {
 			bo.enemyPos.x += movePlat.move;
 		}
+
+		//All move plat
+		for (i = 0; i < 10 && score > 1000  && score < 1500 && allMoveTemp==0 ; i++) {
+			if (platformPosition[i].x >= 640/2) {
+				allMove[i] = 4;
+			}
+			else if (platformPosition[i].x < 640 / 2) {
+				allMove[i] = -4;
+			}
+			if (i == 9) {
+				allMoveTemp = 1;
+			}
+		}
+		
+		for (i = 0; i < 10 && allMoveTemp == 1; i++) {
+			if (platformPosition[i].x < 2) {
+				allMove[i] = 4;
+			}
+			else if (platformPosition[i].x > 640 - 116) {
+				allMove[i] = -4;
+			}
+			platformPosition[i].x += allMove[i];
+			if (en.temp == i) {
+				en.enemyPos.x += allMove[i];
+			}
+			if (bo.temp == i) {
+				bo.enemyPos.x += allMove[i];
+			}
+		}
+		if (score >= 1500 || score <1000) {
+			allMoveTemp = 0;
+		}
+		
+
 
 		if (playerY == height && dy < (-1.62))
 		{
@@ -476,6 +527,31 @@ int main()
 
 		}
 
+		for (i = 0; i < 10 && platReturn == 0; i++) {
+			platformPositionForReturn[i].x = platformPosition[i].x;
+			platformPositionForReturn[i].y = platformPosition[i].y;
+			if (i == 9) {
+				platReturn = 1;
+			}
+		}
+		if (returnToGame == 1) {
+			playerX = 450;
+			playerY = 151;
+			dy = 0;
+			gravity = 0.2;
+			score = 0;
+			temp = false;
+			gameOver = 0;
+			returnToGame = 0;
+			specialJump = 3;
+			en.built = false;
+			bo.built = false;
+			for (i = 0; i < 10; i++) {
+				platformPosition[i].x = platformPositionForReturn[i].x;
+				platformPosition[i].y = platformPositionForReturn[i].y;
+			}
+		}
+
 
 		// detect jump on the platform
 		for (size_t i = 0; i < 10 && gravity != 3; ++i)
@@ -498,7 +574,7 @@ int main()
 			window.draw(plat);
 		}
 		player.setPosition(playerX, playerY);
-		if (player.getGlobalBounds().intersects(enemy.getGlobalBounds()) && gravity != 3) {
+		if (player.getGlobalBounds().intersects(enemy.getGlobalBounds()) && gravity != 3 ) {
 			if (dy > 0) {
 				en.built = false;
 				if (specialJump < 3) {
@@ -507,8 +583,9 @@ int main()
 				enemy.setPosition(1000 , 0);
 				dy = -20;
 				score += 50;
+				Ende.play();
 			}
-			else if(en.built = true){
+			else if(en.built == true){
 				printf("Hit enemy\n");
 				en.built = false;
 				gravity = 3;
@@ -528,7 +605,7 @@ int main()
 		if ( (player.getPosition().x + player.getTextureRect().width > bouncer.getPosition().x) 
 			&& (player.getPosition().x < bouncer.getPosition().x + bouncer.getTextureRect().width)
 			&& (player.getPosition().y +97 < bouncer.getPosition().y + bouncer.getTextureRect().height) 
-			&& (player.getPosition().y + 98 > bouncer.getPosition().y) && dy > 0 && gravity != 3)
+			&& (player.getPosition().y + 98 > bouncer.getPosition().y) && dy > 0 && gravity != 3 && bo.built == 1)
 		{
 			federSound.play();
 			dy = -20;
@@ -538,6 +615,7 @@ int main()
 			if (specialJump < 3) {
 				specialJump++;
 			}
+			Ende.play();
 			score += 50;
 		}
 		//
@@ -676,9 +754,17 @@ int menu(sf::RenderWindow& window) {
 	board.setOrigin(board.getGlobalBounds().width / 2, board.getGlobalBounds().height / 2);
 	board.setPosition(640 / 2, 1024 / 2);
 
-	sf::Text exis("Exis", menuFont, 40);
+	sf::Text exis("Exit", menuFont, 40);
 	exis.setOrigin(exis.getGlobalBounds().width / 2, exis.getGlobalBounds().height / 2);
 	exis.setPosition(640 / 2, 1024 * 3 / 4);
+	//Textbox
+	Textbox textbox1(40, sf::Color::White, false, sf::Color::Black, 3);
+	textbox1.setFont(menuFont);
+	textbox1.setPosition({ 640/2,270 });
+	textbox1.setLimit(true, 5);
+	textbox1.setSelected(true);
+	///
+
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -686,7 +772,15 @@ int menu(sf::RenderWindow& window) {
 		{
 			if (event.type == sf::Event::Closed)
 				window.close();
+			if (event.type == sf::Event::TextEntered) {
+				
+				textbox1.typeOn(event);
+				
+			}
+		
 		}
+		
+		
 
 		if (start.getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
 			start.setFillColor(sf::Color::Red);
@@ -715,6 +809,7 @@ int menu(sf::RenderWindow& window) {
 		window.draw(player);
 		window.draw(Background);
 		window.draw(start);
+		textbox1.drawTo(window);
 		window.draw(board);
 		window.draw(exis);
 		window.display();
