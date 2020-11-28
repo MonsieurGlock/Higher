@@ -8,7 +8,12 @@
 #include "rocket.h"
 #include "pause.h"
 #include "Textbox.h"
-
+#include <string.h>
+#include <iostream>
+#include <sstream>
+#include "board.h"
+#define _CRT_SECURE_NO_WARNINGS
+using namespace std;
 int Enemy(int x);
 bool distance(float x1, float x2, float y1, float y2);
 int checkScore(int score);
@@ -16,9 +21,12 @@ int setY(int score, int i);
 int menu(sf::RenderWindow& window);
 int gameover(sf::RenderWindow& window, int score);
 int movePlayer(void);
+char nameTemp[10];
+char name[10];
+char char_array[10];
 int main()
 {
-	int fromMenu=0;
+	int fromMenu = 0;
 	special star;
 	rocket rock;
 
@@ -30,13 +38,13 @@ int main()
 	sf::Sprite Background;
 	Background.setTexture(Tbackground);
 
-	sf::Texture TtreeL,TtreeR;
+	sf::Texture TtreeL, TtreeR;
 	TtreeL.loadFromFile("pic/jungle-scroller@2x.png");
 	TtreeR.loadFromFile("pic/jungle-scroller@2x.png");
-	sf::Sprite treeL,treeR , treeL2 , treeR2;
+	sf::Sprite treeL, treeR, treeL2, treeR2;
 	treeL.setTexture(TtreeL);
 	treeL.setTextureRect(sf::IntRect(0, 0, 128, 1024));
-	treeL.setOrigin(0,1024);
+	treeL.setOrigin(0, 1024);
 
 	treeR.setTexture(TtreeR);
 	treeR.setTextureRect(sf::IntRect(127, 0, 128, 1024));
@@ -50,31 +58,31 @@ int main()
 	treeR2.setTextureRect(sf::IntRect(127, 0, 128, 1024));
 	treeR2.setOrigin(128, 1024);
 
-	
+
 
 	sf::Texture Tplat;
 	Tplat.loadFromFile("pic/game-tiles-jungle@2x.png");
 	sf::Sprite plat;
 	plat.setTexture(Tplat);
-	plat.setTextureRect(sf::IntRect(2,3,114,29));
+	plat.setTextureRect(sf::IntRect(2, 3, 114, 29));
 
 	sf::Texture Tenemy;
-	Tenemy.loadFromFile("pic/ani.png");
+	Tenemy.loadFromFile("pic/animation2.png");
 	sf::Sprite enemy;
 	enemy.setTexture(Tenemy);
 	enemy.setTextureRect(sf::IntRect(620, 0, 151, 90));
-	enemy.setOrigin(151/2-30, 45);
+	enemy.setOrigin(151 / 2 - 30, 45);
 
 	/*sf::RectangleShape player(sf::Vector2f(90, 90));
 	player.setFillColor(sf::Color::White);
 	player.setOrigin(sf::Vector2f(0, 85));*/
-	sf::Texture Tplayer,TplayerLeft,TplayerFire;
+	sf::Texture Tplayer, TplayerLeft, TplayerFire;
 	Tplayer.loadFromFile("pic/jungle-right@2x.png");
 	TplayerLeft.loadFromFile("pic/jungle-left@2x.png");
 	TplayerFire.loadFromFile("pic/Mouse.png");
 	sf::Sprite player;
 	player.setTexture(Tplayer);
-	player.setTextureRect(sf::IntRect(23,23,101,98));
+	player.setTextureRect(sf::IntRect(23, 23, 101, 98));
 
 	/*sf::RectangleShape plat(sf::Vector2f(100, 25));
 	plat.setFillColor(sf::Color::Yellow);*/
@@ -98,9 +106,10 @@ int main()
 	Tbouncer.loadFromFile("pic/game-tiles-jungle@2x.png");
 	sf::Sprite bouncer;
 	bouncer.setTexture(Tbouncer);
-	bouncer.setTextureRect(sf::IntRect(807, 198, 35, 22));
+	bouncer.setTextureRect(sf::IntRect(807, 197, 35, 24));
+	bouncer.setOrigin(0, 24);
 
-	
+
 	sf::RectangleShape gameoverBackground(sf::Vector2f(500, 700));
 	gameoverBackground.setFillColor(sf::Color::White);
 
@@ -137,21 +146,21 @@ int main()
 	sf::Music bgMusic;
 	bgMusic.openFromFile("sound/bgMusic.wav");
 	bgMusic.setLoop(true);
-	bgMusic.setVolume(5);
+	bgMusic.setVolume(3);
 	bgMusic.play();
 
 
 	// initialize platforms
 	sf::Vector2i platformPosition[10];
 	sf::Vector2i platformPositionForReturn[10];
-	std::uniform_int_distribution<int> x(0, 640-114);
+	std::uniform_int_distribution<int> x(0, 640 - 114);
 	std::uniform_int_distribution<int> y(-25, 800);
 	//std::uniform_int_distribution<int> k(-4, 0);
 	std::default_random_engine e(time(0));
 
 	sf::Vector2f P;
 	// player's positon and down velocity
-	float playerX = 450;
+	float playerX = 620 / 2;
 	int playerY = 151;
 	float dy = 0;
 	float gravity = 0.2;
@@ -164,10 +173,11 @@ int main()
 	bool returnToGame = 0;
 	int specialJump = 3;
 	int rocketPos;
-	bool rocketTemp=0;
+	bool rocketTemp = 0;
 	int allMove[10];
 	bool allMoveTemp = 0;
 	bool platReturn = 0;
+	file save;
 	struct pos {
 		int x;
 		int y;
@@ -188,7 +198,7 @@ int main()
 		sf::Vector2u enemyPos;
 		int temp;
 		bool built = false;
-	}en,bo;
+	}en, bo;
 
 	Bounce Cbouncer;
 	// player's bounding box. It should modify according to the image size
@@ -210,9 +220,9 @@ int main()
 		}
 	}
 
-	
 
-	treeL.setPosition(0,1024);
+
+	treeL.setPosition(0, 1024);
 	treeR.setPosition(640, 1024);
 
 	treeL2.setPosition(0, 0);
@@ -229,12 +239,13 @@ int main()
 		}
 		if (fromMenu == -1) {
 			window.setMouseCursorVisible(true);
-			fromMenu = gameover(window , score);
+			fromMenu = gameover(window, score);
+			save.write(char_array, score);
 			gravity = 0.2;
 			returnToGame = 1;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
-			fromMenu = pauseMenu.menu(window , score);
+			fromMenu = pauseMenu.menu(window, score);
 		}
 		if (fromMenu == 0) {
 			window.setMouseCursorVisible(true);
@@ -242,7 +253,7 @@ int main()
 			fromMenu = menu(window);
 			returnToGame = 1;
 		}
-		
+
 		window.setMouseCursorVisible(false);
 
 		window.draw(Background);
@@ -250,10 +261,11 @@ int main()
 
 		enTime = enClock.getElapsedTime();
 		if (enTime.asSeconds() > 0.01f) {
-			if (enFrame <= 4) {
-				enemy.setTextureRect(sf::IntRect(enFrame * 149, 0, 149, 90));
+
+			if (enFrame <= 8) {
+				enemy.setTextureRect(sf::IntRect(enFrame * 154, 0, 154, 90));
 				enFrame++;
-				if (enFrame == 4) {
+				if (enFrame == 8) {
 					enFrame = 0;
 				}
 			}
@@ -271,8 +283,8 @@ int main()
 			player.move(vecol, 0);
 		}*/
 		vecol = movePlayer();
-		player.move(vecol , 0);
-		
+		player.move(vecol, 0);
+
 		P = player.getPosition();
 		playerX = P.x;
 		if (playerX > 691)
@@ -309,7 +321,7 @@ int main()
 				shootSound.play();
 				bullet.setPosition(P.x + 20, P.y);
 			}
-			
+
 		}
 		else if (vecol > 0) {
 			player.setTexture(Tplayer);
@@ -334,7 +346,7 @@ int main()
 			}
 		}
 
-		
+
 		//build bouncer
 		for (i = 0; i < 10 && bo.built == false;i++) {
 			if (platformPosition[i].x % 2 == 0 && platformPosition[i].y < 20) {
@@ -342,15 +354,17 @@ int main()
 			}
 			if (bo.built == true) {
 				bo.enemyPos.x = platformPosition[i].x + 45;
-				bo.enemyPos.y = platformPosition[i].y - 16;
+				bo.enemyPos.y = platformPosition[i].y;
 				bo.temp = i;
 				//Cbouncer.setBouncerPos(bo.enemyPos.x, bo.enemyPos.y);
+				bouncer.setTextureRect(sf::IntRect(807, 197, 35, 24));
+				bouncer.setOrigin(0, 24);
 				break;
 			}
 		}
 		//moving plat
 		for (i = 0; i < 10 && movePlat.built == 0 && score < 1000; i++) {
-			
+
 			if (platformPosition[i].x > 0 && platformPosition[i].x < 100 && platformPosition[i].y < 10) {
 				movePlat.temp = i;
 				movePlat.built = 1;
@@ -365,7 +379,7 @@ int main()
 				movePlat.move = -4;
 			}
 			platformPosition[movePlat.temp].x += movePlat.move;
-			
+
 		}
 		if (movePlat.temp == en.temp) {
 			en.enemyPos.x += movePlat.move;
@@ -376,8 +390,8 @@ int main()
 		}
 
 		//All move plat
-		for (i = 0; i < 10 && score > 1000  && score < 1500 && allMoveTemp==0 ; i++) {
-			if (platformPosition[i].x >= 640/2) {
+		for (i = 0; i < 10 && score > 1000 && score < 1500 && allMoveTemp == 0; i++) {
+			if (platformPosition[i].x >= 640 / 2) {
 				allMove[i] = 4;
 			}
 			else if (platformPosition[i].x < 640 / 2) {
@@ -387,7 +401,7 @@ int main()
 				allMoveTemp = 1;
 			}
 		}
-		
+
 		for (i = 0; i < 10 && allMoveTemp == 1; i++) {
 			if (platformPosition[i].x < 2) {
 				allMove[i] = 4;
@@ -403,10 +417,10 @@ int main()
 				bo.enemyPos.x += allMove[i];
 			}
 		}
-		if (score >= 1500 || score <1000) {
+		if (score >= 1500 || score < 1000) {
 			allMoveTemp = 0;
 		}
-		
+
 
 
 		if (playerY == height && dy < (-1.62))
@@ -485,13 +499,13 @@ int main()
 
 					}
 				}
-				treeL.setPosition(treeL.getPosition().x, treeL.getPosition().y - dy/5);
-				treeR.setPosition(treeR.getPosition().x, treeR.getPosition().y - dy/5);
+				treeL.setPosition(treeL.getPosition().x, treeL.getPosition().y - dy / 5);
+				treeR.setPosition(treeR.getPosition().x, treeR.getPosition().y - dy / 5);
 
 				treeL2.setPosition(treeL2.getPosition().x, treeL2.getPosition().y - dy / 5);
 				treeR2.setPosition(treeR2.getPosition().x, treeR2.getPosition().y - dy / 5);
 
-				if (treeL.getPosition().y > 1024*2) {
+				if (treeL.getPosition().y > 1024 * 2) {
 					treeL.setPosition(treeL.getPosition().x, 0);
 					treeR.setPosition(treeR.getPosition().x, 0);
 				}
@@ -535,7 +549,7 @@ int main()
 			}
 		}
 		if (returnToGame == 1) {
-			playerX = 450;
+			playerX = 620 / 2;
 			playerY = 151;
 			dy = 0;
 			gravity = 0.2;
@@ -557,7 +571,7 @@ int main()
 		for (size_t i = 0; i < 10 && gravity != 3; ++i)
 		{
 			if ((playerX + player.getTextureRect().width > platformPosition[i].x) && (playerX < platformPosition[i].x + 114)        // player's horizontal range can touch the platform
-				&& (playerY + player.getTextureRect().height > platformPosition[i].y) && (playerY+ player.getTextureRect().height-1 < platformPosition[i].y + 29)  // player's vertical   range can touch the platform
+				&& (playerY + player.getTextureRect().height > platformPosition[i].y) && (playerY + player.getTextureRect().height - 1 < platformPosition[i].y + 29)  // player's vertical   range can touch the platform
 				&& (dy > 0) && !gameOver) // player is falling
 			{
 				jumpSound.play();
@@ -574,18 +588,18 @@ int main()
 			window.draw(plat);
 		}
 		player.setPosition(playerX, playerY);
-		if (player.getGlobalBounds().intersects(enemy.getGlobalBounds()) && gravity != 3 ) {
+		if (player.getGlobalBounds().intersects(enemy.getGlobalBounds()) && gravity != 3) {
 			if (dy > 0) {
 				en.built = false;
 				if (specialJump < 3) {
 					specialJump++;
 				}
-				enemy.setPosition(1000 , 0);
+				enemy.setPosition(1000, 0);
 				dy = -20;
 				score += 50;
 				Ende.play();
 			}
-			else if(en.built == true){
+			else if (en.built == true) {
 				printf("Hit enemy\n");
 				en.built = false;
 				gravity = 3;
@@ -602,13 +616,15 @@ int main()
 		/*if (player.getGlobalBounds().intersects(bouncer.getGlobalBounds()) && dy > 0) {
 			dy = -20;
 		}*/
-		if ( (player.getPosition().x + player.getTextureRect().width > bouncer.getPosition().x) 
+		if ((player.getPosition().x + player.getTextureRect().width > bouncer.getPosition().x)
 			&& (player.getPosition().x < bouncer.getPosition().x + bouncer.getTextureRect().width)
-			&& (player.getPosition().y +97 < bouncer.getPosition().y + bouncer.getTextureRect().height) 
-			&& (player.getPosition().y + 98 > bouncer.getPosition().y) && dy > 0 && gravity != 3 && bo.built == 1)
+			&& (player.getPosition().y + 97 < bouncer.getPosition().y /*+ 24bouncer.getTextureRect().height*/)
+			&& (player.getPosition().y + 98 > bouncer.getPosition().y - bouncer.getTextureRect().height) && dy > 0 && gravity != 3 && bo.built == 1)
 		{
 			federSound.play();
 			dy = -20;
+			bouncer.setTextureRect(sf::IntRect(807, 231, 35, 54));
+			bouncer.setOrigin(0, 54);
 		}
 		if (bullet.getGlobalBounds().intersects(enemy.getGlobalBounds())) {
 			en.built = false;
@@ -619,21 +635,21 @@ int main()
 			score += 50;
 		}
 		//
-		for (i = 0; i < 10 && rock.bulit == 0; i++ ) {
-			if (platformPosition[i].x % 160 == 0 ) {
+		for (i = 0; i < 10 && rock.bulit == 0; i++) {
+			if (platformPosition[i].x % 160 == 0) {
 				rocketPos = platformPosition[i].x;
 				rocketTemp = true;
 				break;
 			}
 		}
 		if (rocketTemp == true) {
-			rocketTemp = rock.makeRocket(window, rocketPos);
-			
+			//rocketTemp = rock.makeRocket(window, rocketPos);
+
 		}
-		
-		
-		
-	
+
+
+
+
 		window.draw(player);
 		window.draw(treeL);
 		window.draw(treeR);
@@ -730,7 +746,7 @@ int menu(sf::RenderWindow& window) {
 
 	sf::Font menuFont;
 	menuFont.loadFromFile("images/AlloyInk-nRLyO.ttf");
-	
+
 	sf::Texture Tbackground;
 	Tbackground.loadFromFile("pic/jungle-bck@2x.png");
 	sf::Sprite Background;
@@ -760,11 +776,16 @@ int menu(sf::RenderWindow& window) {
 	//Textbox
 	Textbox textbox1(40, sf::Color::White, false, sf::Color::Black, 3);
 	textbox1.setFont(menuFont);
-	textbox1.setPosition({ 640/2,270 });
+	textbox1.setPosition({ 640 / 2 - 65,270 + 20 });
 	textbox1.setLimit(true, 5);
 	textbox1.setSelected(true);
 	///
-
+	string nameliveinput;
+	file leader;
+	//input and save into file
+	char name[20];
+	
+	
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -773,24 +794,28 @@ int menu(sf::RenderWindow& window) {
 			if (event.type == sf::Event::Closed)
 				window.close();
 			if (event.type == sf::Event::TextEntered) {
-				
+
 				textbox1.typeOn(event);
-				
+
 			}
-		
+
 		}
 		
-		
+		string s = textbox1.getText();
+		strcpy(char_array, s.c_str());
+		//printf("%s\n", char_array);
 
 		if (start.getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
 			start.setFillColor(sf::Color::Red);
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+				printf("%s",nameTemp);
 				return 1;
 			}
 		}
 		else if (board.getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
 			board.setFillColor(sf::Color::Red);
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+				leader.read();
 				return 2;
 			}
 		}
@@ -819,7 +844,7 @@ int menu(sf::RenderWindow& window) {
 
 }
 
-int gameover(sf::RenderWindow& window ,int score) {
+int gameover(sf::RenderWindow& window, int score) {
 	sf::Font menuFont;
 	menuFont.loadFromFile("images/AlloyInk-nRLyO.ttf");
 
@@ -832,6 +857,8 @@ int gameover(sf::RenderWindow& window ,int score) {
 	scoreText.setOrigin(scoreText.getGlobalBounds().width / 2, scoreText.getGlobalBounds().height / 2);
 	scoreText.setPosition(640 / 2, 1024 * 1 / 4);
 	scoreText.setFillColor(sf::Color::White);
+
+
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -861,7 +888,7 @@ int gameover(sf::RenderWindow& window ,int score) {
 }
 
 int movePlayer(void) {
-	int speed=6;
+	int speed = 6;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
 		speed = 14;
 	}
@@ -873,4 +900,3 @@ int movePlayer(void) {
 		return -speed;
 	}
 }
-
