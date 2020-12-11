@@ -109,14 +109,25 @@ int main()
 	bouncer.setTextureRect(sf::IntRect(807, 197, 35, 24));
 	bouncer.setOrigin(0, 24);
 
+	sf::Texture Tshoes;
+	Tshoes.loadFromFile("pic/game-tiles-jungle@2x.png");
+	sf::Sprite shoes;
+	shoes.setTexture(Tshoes);
+	shoes.setTextureRect(sf::IntRect(601, 409, 57, 42));
+	shoes.setOrigin(0, 0);
+
+	sf::Sprite flyingEnemy;
+	flyingEnemy.setTexture(Tshoes);
+	flyingEnemy.setTextureRect(sf::IntRect(297, 528, 92, 72));
+	flyingEnemy.setOrigin(0, 0);
 
 	sf::RectangleShape gameoverBackground(sf::Vector2f(500, 700));
 	gameoverBackground.setFillColor(sf::Color::White);
 
 	sf::Font scoreFont;
-	scoreFont.loadFromFile("images/AlloyInk-nRLyO.ttf");
+	scoreFont.loadFromFile("images/LosingGripRegular-YxG4.ttf");
 
-	sf::Text textScore("Score : ", scoreFont, 20);
+	sf::Text textScore("Score : ", scoreFont, 40);
 
 	//sound
 	sf::SoundBuffer bjump;
@@ -125,8 +136,9 @@ int main()
 	jumpSound.setBuffer(bjump);
 	jumpSound.setVolume(50);
 
-	sf::SoundBuffer bfeder;
+	sf::SoundBuffer bfeder,bfe;
 	bfeder.loadFromFile("sound/feder.wav");
+	bfe.loadFromFile("sound/trampoline.wav");
 	sf::Sound federSound;
 	federSound.setBuffer(bfeder);
 	federSound.setVolume(50);
@@ -149,6 +161,15 @@ int main()
 	bgMusic.setVolume(3);
 	bgMusic.play();
 
+	sf::Sound shoesSound;
+	shoesSound.setBuffer(bfeder);
+	shoesSound.setVolume(50);
+
+	sf::SoundBuffer bflying;
+	bflying.loadFromFile("sound/flying.wav");
+	sf::Sound flyingSound;
+	flyingSound.setBuffer(bflying);
+	flyingSound.setVolume(50);
 
 	// initialize platforms
 	sf::Vector2i platformPosition[10];
@@ -163,7 +184,7 @@ int main()
 	float playerX = 620 / 2;
 	int playerY = 151;
 	float dy = 0;
-	float gravity = 0.2;
+	float gravity = 10;
 	int height = 600;
 	int score = 0;
 	int i, j, k;
@@ -177,6 +198,10 @@ int main()
 	int allMove[10];
 	bool allMoveTemp = 0;
 	bool platReturn = 0;
+	int bouncerType;
+	int tempPlatType;
+	int start = 1000;
+	int end = 1500;
 	file save;
 	struct pos {
 		int x;
@@ -192,19 +217,34 @@ int main()
 	movePlat.move = -10;
 	sf::Clock enClock;
 	sf::Time enTime;
+
+	sf::Clock flyClock;
+	sf::Time flyTime;
 	int enFrame = 0;
+	int flyFrame = 0;
 	//enemy
 	struct sEnemy {
 		sf::Vector2u enemyPos;
 		int temp;
 		bool built = false;
-	}en, bo;
+	}en, bo,fly;
+
+	struct Shoes {
+		sf::Vector2u Pos;
+		int temp;
+		bool built = false;
+		bool onPlayer = false;
+		int used = 0;
+		bool LR = false;
+	}Sshoes;
 
 	Bounce Cbouncer;
 	// player's bounding box. It should modify according to the image size
 	const int PLAYER_LEFT_BOUNDING_BOX = 90;
 	const int PLAYER_RIGHT_BOUNDING_BOX = 90;
 	const int PLAYER_BOTTOM_BOUNDING_BOX = 90;
+	const int LLhight = 50;
+	const int LLwidth = 40;
 	platformPosition[9] = { 450 , 880 };
 	for (i = 1; i < 9; i++) {
 		temp = false;
@@ -241,7 +281,7 @@ int main()
 			window.setMouseCursorVisible(true);
 			fromMenu = gameover(window, score);
 			save.write(char_array, score);
-			gravity = 0.2;
+			gravity = 10;
 			returnToGame = 1;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
@@ -271,7 +311,9 @@ int main()
 			}
 			enClock.restart();
 		}
+		//Time for flying
 
+		
 
 		float vecol;
 
@@ -309,28 +351,15 @@ int main()
 		if (vecol > 0) {
 			player.setTexture(Tplayer);
 			player.setTextureRect(sf::IntRect(23, 23, 101, 98));
+			Sshoes.LR = true;
 		}
 		else if (vecol < 0) {
 			player.setTexture(TplayerLeft);
 			player.setTextureRect(sf::IntRect(0, 23, 101, 98));
+			Sshoes.LR = false;
 		}
-		/*if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-			player.setTexture(TplayerFire);
-			player.setTextureRect(sf::IntRect(26, 0, 68 , 120));
-			if(bullet.getPosition().y < 0){
-				shootSound.play();
-				bullet.setPosition(P.x + 20, P.y);
-			}
+		
 
-		}
-		else if (vecol > 0) {
-			player.setTexture(Tplayer);
-			player.setTextureRect(sf::IntRect(23, 23, 101, 98));
-		}
-		else if (vecol < 0) {
-			player.setTexture(TplayerLeft);
-			player.setTextureRect(sf::IntRect(0, 23, 101, 98));
-		}*/
 		bullet.move(0, -20);
 		window.draw(bullet);
 		//set Enemy
@@ -345,6 +374,26 @@ int main()
 				break;
 			}
 		}
+		//set shoes
+		for (i = 0; i < 10 && Sshoes.built == false && Sshoes.onPlayer == false;i++) {
+			if (platformPosition[i].x % 61 == 0 && platformPosition[i].x > 0 && platformPosition[i].y < 10) {
+				Sshoes.built = true;
+			}
+			if (Sshoes.built == true) {
+				Sshoes.Pos.x = platformPosition[i].x + 30;
+				Sshoes.Pos.y = platformPosition[i].y ;
+				Sshoes.temp = i;
+				break;
+			}
+		}
+		//set flying
+		if (score % 800 == 0 && score > 0 && fly.built == false) {
+			fly.enemyPos.x = playerX;
+			fly.enemyPos.y = 0;
+			fly.built = true;
+			flyingSound.play();
+		}
+
 
 
 		//build bouncer
@@ -353,12 +402,24 @@ int main()
 				bo.built = true;
 			}
 			if (bo.built == true) {
-				bo.enemyPos.x = platformPosition[i].x + 45;
-				bo.enemyPos.y = platformPosition[i].y;
 				bo.temp = i;
 				//Cbouncer.setBouncerPos(bo.enemyPos.x, bo.enemyPos.y);
-				bouncer.setTextureRect(sf::IntRect(807, 197, 35, 24));
-				bouncer.setOrigin(0, 24);
+				if (playerX >= 300) {
+					bouncer.setTextureRect(sf::IntRect(807, 197, 35, 24));
+					bouncer.setOrigin(0, 24);
+					federSound.setBuffer(bfeder);
+					tempPlatType = 45;
+					bouncerType = 1;
+				}
+				else {
+					bouncer.setTextureRect(sf::IntRect(373, 188, 77, 35));
+					bouncer.setOrigin(0, 35);
+					federSound.setBuffer(bfe);
+					tempPlatType = 20;
+					bouncerType = 2;
+				}
+				bo.enemyPos.x = platformPosition[i].x + tempPlatType;
+				bo.enemyPos.y = platformPosition[i].y;
 				break;
 			}
 		}
@@ -385,12 +446,20 @@ int main()
 			en.enemyPos.x += movePlat.move;
 		}
 
+		if (movePlat.temp == Sshoes.temp) {
+			Sshoes.Pos.x += movePlat.move;
+		}
+
 		if (movePlat.temp == bo.temp) {
 			bo.enemyPos.x += movePlat.move;
 		}
 
 		//All move plat
-		for (i = 0; i < 10 && score > 1000 && score < 1500 && allMoveTemp == 0; i++) {
+		if (score % 1000 == 0 && score > 0) {
+			start = score;
+			end = start + 500;
+		}
+		for (i = 0; i < 10 && score > start && score < end && allMoveTemp == 0; i++) {
 			if (platformPosition[i].x >= 640 / 2) {
 				allMove[i] = 4;
 			}
@@ -416,12 +485,16 @@ int main()
 			if (bo.temp == i) {
 				bo.enemyPos.x += allMove[i];
 			}
+
+			if (Sshoes.temp == i) {
+				Sshoes.Pos.x += allMove[i];
+			}
 		}
-		if (score >= 1500 || score < 1000) {
+		if (score >= end || score < start) {
 			allMoveTemp = 0;
 		}
 
-
+	
 
 		if (playerY == height && dy < (-1.62))
 		{
@@ -443,7 +516,7 @@ int main()
 				{
 					temp = false;
 					while (temp != true) {
-						if (score <= 400) {
+						if (score <= 1500) {
 							platformPosition[i].y = 0;
 							platformPosition[i].x = x(e);
 							for (j = 0; j < 10; j++) {
@@ -457,7 +530,7 @@ int main()
 
 							}
 						}
-						if (score > 400) {
+						if (score > 1500) {
 							if (i % 2 == 0) {
 								k = i;
 							}
@@ -520,10 +593,15 @@ int main()
 				if (bo.enemyPos.y > 1024) {
 					bo.built = false;
 				}
+				if (Sshoes.Pos.y > 1024) {
+					Sshoes.built = false;
+				}
 
 			}
 			en.enemyPos.y -= dy;
 			bo.enemyPos.y -= dy;
+			Sshoes.Pos.y -= dy;
+			fly.enemyPos.y -= dy;
 		}
 
 		if (en.built == true) {
@@ -534,7 +612,6 @@ int main()
 		if (bo.built == true) {
 			bouncer.setPosition(bo.enemyPos.x, bo.enemyPos.y);
 			window.draw(bouncer);
-
 		}
 
 		if (score % 50 == 0) {
@@ -560,6 +637,9 @@ int main()
 			specialJump = 3;
 			en.built = false;
 			bo.built = false;
+			Sshoes.built = false;
+			Sshoes.onPlayer = false;
+			Sshoes.used = 0;
 			for (i = 0; i < 10; i++) {
 				platformPosition[i].x = platformPositionForReturn[i].x;
 				platformPosition[i].y = platformPositionForReturn[i].y;
@@ -574,10 +654,22 @@ int main()
 				&& (playerY + player.getTextureRect().height > platformPosition[i].y) && (playerY + player.getTextureRect().height - 1 < platformPosition[i].y + 29)  // player's vertical   range can touch the platform
 				&& (dy > 0) && !gameOver) // player is falling
 			{
-				jumpSound.play();
-				dy = -12;
+				if (Sshoes.onPlayer == false) {
+					jumpSound.play();
+					dy = -12;
+				}
+				else if (Sshoes.onPlayer == true) {
+					shoesSound.play();
+					dy = -20;
+					Sshoes.used++;
+				}
+				
 			}
 
+		}
+		if (Sshoes.used >= 3) {
+			Sshoes.onPlayer = false;
+			Sshoes.used = 0;
 		}
 
 		// set and draw platforms
@@ -586,6 +678,10 @@ int main()
 		{
 			plat.setPosition(platformPosition[i].x, platformPosition[i].y);
 			window.draw(plat);
+		}
+		if (Sshoes.built == true && Sshoes.onPlayer == false) {
+			shoes.setPosition(Sshoes.Pos.x, Sshoes.Pos.y);
+			window.draw(shoes);
 		}
 		player.setPosition(playerX, playerY);
 		if (player.getGlobalBounds().intersects(enemy.getGlobalBounds()) && gravity != 3) {
@@ -621,18 +717,40 @@ int main()
 			&& (player.getPosition().y + 97 < bouncer.getPosition().y /*+ 24bouncer.getTextureRect().height*/)
 			&& (player.getPosition().y + 98 > bouncer.getPosition().y - bouncer.getTextureRect().height) && dy > 0 && gravity != 3 && bo.built == 1)
 		{
+			
 			federSound.play();
 			dy = -20;
-			bouncer.setTextureRect(sf::IntRect(807, 231, 35, 54));
-			bouncer.setOrigin(0, 54);
+			
+			
+			if (bouncerType == 1) {
+				bouncer.setTextureRect(sf::IntRect(807, 231, 35, 54));
+				bouncer.setOrigin(0, 54);
+			}
+			else if (bouncerType == 2) {
+				bouncer.setTextureRect(sf::IntRect(296, 188, 77, 35));
+				bouncer.setOrigin(0, 35);
+			}
 		}
-		if (bullet.getGlobalBounds().intersects(enemy.getGlobalBounds())) {
+		if (bullet.getGlobalBounds().intersects(enemy.getGlobalBounds()) && en.built == true) {
 			en.built = false;
 			if (specialJump < 3) {
 				specialJump++;
 			}
 			Ende.play();
-			score += 50;
+			score += 30;
+		}
+		if (bullet.getGlobalBounds().intersects(flyingEnemy.getGlobalBounds()) && fly.built == true) {
+			fly.built = false;
+			if (specialJump < 3) {
+				specialJump++;
+			}
+			Ende.play();
+			score += 30;
+		}
+
+		if (shoes.getGlobalBounds().intersects(player.getGlobalBounds()) && Sshoes.built == true) {
+			Sshoes.onPlayer = true;
+			Sshoes.built = false;
 		}
 		//
 		for (i = 0; i < 10 && rock.bulit == 0; i++) {
@@ -646,11 +764,38 @@ int main()
 			//rocketTemp = rock.makeRocket(window, rocketPos);
 
 		}
-
-
-
-
 		window.draw(player);
+		if (Sshoes.onPlayer == true) {
+			if (Sshoes.LR == false) {
+				shoes.setScale(1,1);
+				shoes.setPosition(playerX + 30, playerY + 80);
+				window.draw(shoes);
+			}
+			else if (Sshoes.LR == true) {
+				shoes.setScale(-1, 1);
+				shoes.setPosition(playerX +70 , playerY + 80);
+				window.draw(shoes);
+			}
+			
+		}
+
+
+		if(flyingEnemy.getGlobalBounds().intersects(player.getGlobalBounds()) && fly.built == true){
+			printf("Hit enemy\n");
+			fly.built = false;
+			gravity = 3;
+		}
+		if (fly.built == true) {
+			fly.enemyPos.y += 5;
+			flyingEnemy.setPosition(fly.enemyPos.x , fly.enemyPos.y );
+			window.draw(flyingEnemy);
+		}
+		if (fly.enemyPos.y > 1024) {
+			fly.built = false;
+		}
+		if (fly.built == false) {
+			flyingSound.stop();
+		}
 		window.draw(treeL);
 		window.draw(treeR);
 		window.draw(treeL2);
@@ -745,38 +890,68 @@ int setY(int score, int i) {
 int menu(sf::RenderWindow& window) {
 
 	sf::Font menuFont;
-	menuFont.loadFromFile("images/AlloyInk-nRLyO.ttf");
+	menuFont.loadFromFile("images/LosingGripRegular-YxG4.ttf");
+
+	sf::Font gameFont;
+	gameFont.loadFromFile("images/AlloyInk-nRLyO.ttf");
 
 	sf::Texture Tbackground;
 	Tbackground.loadFromFile("pic/jungle-bck@2x.png");
 	sf::Sprite Background;
 	Background.setTexture(Tbackground);
 
-	sf::Texture Tplayer;
-	Tplayer.loadFromFile("pic/jungle-right@2x");
-	sf::Sprite player;
-	player.setTexture(Tplayer);
+	sf::Texture Ttop;
+	Ttop.loadFromFile("pic/Top.png");
+	sf::Sprite top;
+	top.setTexture(Ttop);
 
 	/*sf::Texture Tdoodle;
 	Tdoodle.loadFromFile("pic/jungle-right@2x");
 	sf::Sprite Background;
 	Background.setTexture(Tbackground);*/
 
-	sf::Text start("Start", menuFont, 40);
+	sf::Text start("Start", menuFont, 60);
 	start.setOrigin(start.getGlobalBounds().width / 2, start.getGlobalBounds().height / 2);
 	start.setPosition(640 / 2, 1024 * 1 / 4);
 
-	sf::Text board("Leader Board", menuFont, 40);
+	sf::Text board("Leader Board", menuFont, 60);
 	board.setOrigin(board.getGlobalBounds().width / 2, board.getGlobalBounds().height / 2);
 	board.setPosition(640 / 2, 1024 / 2);
 
-	sf::Text exis("Exit", menuFont, 40);
+	sf::Text exis("Exit", menuFont, 60);
 	exis.setOrigin(exis.getGlobalBounds().width / 2, exis.getGlobalBounds().height / 2);
 	exis.setPosition(640 / 2, 1024 * 3 / 4);
+
+	sf::Text game("HIGHER", gameFont, 70);
+	game.setOrigin(game.getGlobalBounds().width / 2, 0);
+	game.setPosition(640 / 2, 60);
+	game.setFillColor(sf::Color::Black);
+
+	sf::Texture TtreeL, TtreeR;
+	TtreeL.loadFromFile("pic/jungle-scroller@2x.png");
+	TtreeR.loadFromFile("pic/jungle-scroller@2x.png");
+	sf::Sprite treeL, treeR;
+	treeL.setTexture(TtreeL);
+	treeL.setTextureRect(sf::IntRect(0, 0, 128, 1024));
+	treeL.setOrigin(0, 1024);
+
+	treeR.setTexture(TtreeR);
+	treeR.setTextureRect(sf::IntRect(127, 0, 128, 1024));
+	treeR.setOrigin(128, 1024);
+
+	treeL.setPosition(0, 1024);
+	treeR.setPosition(640, 1024);
+
+	sf::Texture Tplat;
+	Tplat.loadFromFile("pic/game-tiles-jungle@2x.png");
+	sf::Sprite plat;
+	plat.setTexture(Tplat);
+	plat.setTextureRect(sf::IntRect(2, 3, 114, 29));
+
 	//Textbox
 	Textbox textbox1(40, sf::Color::White, false, sf::Color::Black, 3);
 	textbox1.setFont(menuFont);
-	textbox1.setPosition({ 640 / 2 - 65,270 + 20 });
+	textbox1.setPosition({ 640 / 2 - 33,270 + 40 });
 	textbox1.setLimit(true, 5);
 	textbox1.setSelected(true);
 	///
@@ -784,8 +959,42 @@ int menu(sf::RenderWindow& window) {
 	file leader;
 	//input and save into file
 	char name[20];
+
+	sf::Texture Tenemy;
+	Tenemy.loadFromFile("pic/animation2.png");
+	sf::Sprite enemy;
+	enemy.setTexture(Tenemy);
+	enemy.setTextureRect(sf::IntRect(620, 0, 151, 90));
+	enemy.setOrigin(151 / 2 - 30, 45);
+	enemy.setPosition(500,200);
+
+	/*sf::RectangleShape player(sf::Vector2f(90, 90));
+	player.setFillColor(sf::Color::White);
+	player.setOrigin(sf::Vector2f(0, 85));*/
+	sf::Texture Tplayer, TplayerLeft, TplayerFire;
+	Tplayer.loadFromFile("pic/jungle-right@2x.png");
+	TplayerLeft.loadFromFile("pic/jungle-left@2x.png");
+	TplayerFire.loadFromFile("pic/Mouse.png");
+	sf::Sprite player;
+	player.setTexture(Tplayer);
+	player.setTextureRect(sf::IntRect(23, 23, 101, 98));
+
+	float gravity = 0.3;
+	float dy=0;
+	int playerX = 50;
+	float playerY = 500;
+
+	sf::SoundBuffer bjump;
+	bjump.loadFromFile("sound/jump.wav");
+	sf::Sound jumpSound;
+	jumpSound.setBuffer(bjump);
+	jumpSound.setVolume(50);
 	
-	
+	sf::Clock enClock;
+	sf::Time enTime;
+	int enFrame = 0;
+	window.setFramerateLimit(60);
+
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -800,7 +1009,18 @@ int menu(sf::RenderWindow& window) {
 			}
 
 		}
-		
+		enTime = enClock.getElapsedTime();
+		if (enTime.asSeconds() > 0.01f) {
+
+			if (enFrame <= 8) {
+				enemy.setTextureRect(sf::IntRect(enFrame * 154, 0, 154, 90));
+				enFrame++;
+				if (enFrame == 8) {
+					enFrame = 0;
+				}
+			}
+			enClock.restart();
+		}
 		string s = textbox1.getText();
 		strcpy(char_array, s.c_str());
 		//printf("%s\n", char_array);
@@ -815,8 +1035,8 @@ int menu(sf::RenderWindow& window) {
 		else if (board.getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
 			board.setFillColor(sf::Color::Red);
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-				leader.read();
-				return 2;
+				leader.read(window);
+				//return 2;
 			}
 		}
 		else if (exis.getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
@@ -831,12 +1051,30 @@ int menu(sf::RenderWindow& window) {
 			board.setFillColor(sf::Color::White);
 			exis.setFillColor(sf::Color::White);
 		}
+
+		dy += gravity;
+		playerY += dy;
+
+		player.setPosition(playerX, playerY);
+		plat.setPosition(playerX, 800);
+		if (player.getGlobalBounds().intersects(plat.getGlobalBounds()) && dy > 0) {
+			jumpSound.play();
+			dy -= 20;
+		}
+
 		window.draw(player);
 		window.draw(Background);
+		window.draw(player);
+		window.draw(plat);
 		window.draw(start);
+		window.draw(enemy);
 		textbox1.drawTo(window);
 		window.draw(board);
 		window.draw(exis);
+		window.draw(game);
+		window.draw(treeL);
+		window.draw(treeR);
+		window.draw(top);
 		window.display();
 		window.clear();
 
@@ -846,19 +1084,79 @@ int menu(sf::RenderWindow& window) {
 
 int gameover(sf::RenderWindow& window, int score) {
 	sf::Font menuFont;
-	menuFont.loadFromFile("images/AlloyInk-nRLyO.ttf");
+	menuFont.loadFromFile("images/LosingGripRegular-YxG4.ttf");
+
+	sf::Font headFont;
+	headFont.loadFromFile("images/AlloyInk-nRLyO.ttf");
 
 	sf::Texture Tbackground;
 	Tbackground.loadFromFile("pic/jungle-bck@2x.png");
 	sf::Sprite Background;
 	Background.setTexture(Tbackground);
 
-	sf::Text scoreText("SCORE : ", menuFont, 40);
+	sf::Text scoreText("SCORE : ", menuFont, 70);
 	scoreText.setOrigin(scoreText.getGlobalBounds().width / 2, scoreText.getGlobalBounds().height / 2);
-	scoreText.setPosition(640 / 2, 1024 * 1 / 4);
+	scoreText.setPosition(640 / 2, 1024 * 2 / 4);
 	scoreText.setFillColor(sf::Color::White);
 
+	sf::Text back("MENU", menuFont, 70);
+	back.setOrigin(back.getGlobalBounds().width / 2, back.getGlobalBounds().height / 2);
+	back.setPosition(640 / 2, 1024 * 3 / 4);
+	back.setFillColor(sf::Color::White);
 
+	sf::Text over("GAME OVER", headFont, 70);
+	over.setOrigin(over.getGlobalBounds().width / 2, over.getGlobalBounds().height / 2);
+	over.setPosition(640 / 2, 1024 * 1 / 4);
+	over.setFillColor(sf::Color::Black);
+
+	sf::Texture Ttop;
+	Ttop.loadFromFile("pic/Top.png");
+	sf::Sprite top;
+	top.setTexture(Ttop);
+
+	sf::Texture TtreeL;
+	sf::Texture TtreeR;
+	TtreeL.loadFromFile("pic/jungle-scroller@2x.png");
+	TtreeR.loadFromFile("pic/jungle-scroller@2x.png");
+	sf::Sprite treeL, treeR;
+	treeL.setTexture(TtreeL);
+	treeL.setTextureRect(sf::IntRect(0, 0, 128, 1024));
+	treeL.setOrigin(0, 1024);
+
+	treeR.setTexture(TtreeR);
+	treeR.setTextureRect(sf::IntRect(127, 0, 128, 1024));
+	treeR.setOrigin(128, 1024);
+
+	treeL.setPosition(0, 1024);
+	treeR.setPosition(640, 1024);
+
+	sf::Texture Tplayer;
+	sf::Texture TplayerLeft;
+	sf::Texture TplayerFire;
+	Tplayer.loadFromFile("pic/jungle-right@2x.png");
+	TplayerLeft.loadFromFile("pic/jungle-left@2x.png");
+	TplayerFire.loadFromFile("pic/Mouse.png");
+	sf::Sprite player;
+	player.setTexture(Tplayer);
+	player.setTextureRect(sf::IntRect(23, 23, 101, 98));
+	player.setPosition(50 , 500);
+
+	sf::Texture starT[3];
+	starT[0].loadFromFile("pic/stars1@2x.png");
+	starT[1].loadFromFile("pic/stars2@2x.png");
+	starT[2].loadFromFile("pic/stars3@2x.png");
+	sf::Sprite star;
+
+	sf::Clock enClock;
+	sf::Time enTime;
+	int enFrame = 0;
+
+	sf::SoundBuffer bflying;
+	bflying.loadFromFile("sound/pada.wav");
+	sf::Sound flyingSound;
+	flyingSound.setBuffer(bflying);
+	flyingSound.setVolume(50);
+	flyingSound.play();
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -869,18 +1167,38 @@ int gameover(sf::RenderWindow& window, int score) {
 		}
 		scoreText.setString("Score: " + std::to_string(score));
 
-		if (scoreText.getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
-			scoreText.setFillColor(sf::Color::Red);
+		if (back.getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
+			back.setFillColor(sf::Color::Red);
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 				return 0;
 			}
 		}
 		else {
-			scoreText.setFillColor(sf::Color::White);
+			back.setFillColor(sf::Color::White);
 		}
+		enTime = enClock.getElapsedTime();
+		if (enTime.asSeconds() > 0.3f) {
+
+			if (enFrame <= 2) {
+				star.setTexture(starT[enFrame]);
+				enFrame++;
+				if (enFrame == 2) {
+					enFrame = 0;
+				}
+			}
+			enClock.restart();
+		}
+		star.setPosition(45 , 470);
 
 		window.draw(Background);
 		window.draw(scoreText);
+		window.draw(player);
+		window.draw(star);
+		window.draw(over);
+		window.draw(back);
+		window.draw(top);
+		window.draw(treeL);
+		window.draw(treeR);;
 		window.display();
 		window.clear();
 	}

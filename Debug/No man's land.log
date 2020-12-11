@@ -25,7 +25,7 @@ D:\Programming\term1\No man\No man's land\No man's land\rocket.h(29,32): warning
           [
               T=int
           ]
-D:\Programming\term1\No man\No man's land\No man's land\pause.h(41,105): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\pause.h(66,105): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
           with
           [
               T=int
@@ -34,7 +34,7 @@ D:\Programming\term1\No man\No man's land\No man's land\pause.h(41,105): warning
           [
               T=float
           ]
-D:\Programming\term1\No man\No man's land\No man's land\pause.h(41,71): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\pause.h(66,71): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
           with
           [
               T=int
@@ -43,7 +43,7 @@ D:\Programming\term1\No man\No man's land\No man's land\pause.h(41,71): warning 
           [
               T=float
           ]
-D:\Programming\term1\No man\No man's land\No man's land\pause.h(47,110): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\pause.h(72,110): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
           with
           [
               T=int
@@ -52,7 +52,7 @@ D:\Programming\term1\No man\No man's land\No man's land\pause.h(47,110): warning
           [
               T=float
           ]
-D:\Programming\term1\No man\No man's land\No man's land\pause.h(47,76): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\pause.h(72,76): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
           with
           [
               T=int
@@ -66,167 +66,197 @@ D:\Programming\term1\No man\No man's land\No man's land\Textbox.h(60,22): warnin
 D:\Programming\term1\No man\No man's land\No man's land\Textbox.h(94,30): warning C4018: '<=': signed/unsigned mismatch
 D:\Programming\term1\No man\No man's land\No man's land\Textbox.h(98,35): warning C4018: '>': signed/unsigned mismatch
 D:\Programming\term1\No man\No man's land\No man's land\Textbox.h(136,21): warning C4018: '<': signed/unsigned mismatch
+D:\Programming\term1\No man\No man's land\No man's land\board.h(84,40): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\board.h(93,49): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\board.h(93,29): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\board.h(98,49): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\board.h(98,29): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\board.h(103,49): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\board.h(103,29): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\board.h(108,49): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\board.h(108,29): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\board.h(113,49): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\board.h(113,29): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\board.h(120,47): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\board.h(120,22): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\board.h(125,47): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\board.h(125,22): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\board.h(130,47): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\board.h(130,22): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\board.h(135,47): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\board.h(135,22): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\board.h(140,47): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\board.h(140,22): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\board.h(190,104): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+D:\Programming\term1\No man\No man's land\No man's land\board.h(190,70): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
 D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(15,1): warning C4005: '_CRT_SECURE_NO_WARNINGS': macro redefinition
 D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp : message : see previous definition of '_CRT_SECURE_NO_WARNINGS'
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(159,35): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(166,21): warning C4305: 'initializing': truncation from 'double' to 'float'
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(215,109): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(180,35): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(255,109): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
           with
           [
               T=int
           ]
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(215,86): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(255,86): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
           with
           [
               T=int
           ]
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(215,63): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(255,63): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
           with
           [
               T=int
           ]
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(215,40): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(255,40): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
           with
           [
               T=int
           ]
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(244,17): warning C4305: '=': truncation from 'double' to 'float'
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(285,21): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(434,16): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(441,32): warning C4244: '-=': conversion from 'float' to 'T', possible loss of data
-          with
-          [
-              T=int
-          ]
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(452,114): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
-          with
-          [
-              T=int
-          ]
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(452,91): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
-          with
-          [
-              T=int
-          ]
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(452,68): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
-          with
-          [
-              T=int
-          ]
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(452,45): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
-          with
-          [
-              T=int
-          ]
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(472,114): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
-          with
-          [
-              T=int
-          ]
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(472,91): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
-          with
-          [
-              T=int
-          ]
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(472,68): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
-          with
-          [
-              T=int
-          ]
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(472,45): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
-          with
-          [
-              T=int
-          ]
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(525,23): warning C4244: '-=': conversion from 'float' to 'T', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(327,21): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(391,21): warning C4244: '=': conversion from 'float' to 'T', possible loss of data
           with
           [
               T=unsigned int
           ]
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(526,23): warning C4244: '-=': conversion from 'float' to 'T', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(507,16): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(514,32): warning C4244: '-=': conversion from 'float' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(525,114): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+          with
+          [
+              T=int
+          ]
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(525,91): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+          with
+          [
+              T=int
+          ]
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(525,68): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+          with
+          [
+              T=int
+          ]
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(525,45): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+          with
+          [
+              T=int
+          ]
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(545,114): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+          with
+          [
+              T=int
+          ]
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(545,91): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+          with
+          [
+              T=int
+          ]
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(545,68): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+          with
+          [
+              T=int
+          ]
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(545,45): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+          with
+          [
+              T=int
+          ]
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(601,23): warning C4244: '-=': conversion from 'float' to 'T', possible loss of data
           with
           [
               T=unsigned int
           ]
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(530,51): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(602,23): warning C4244: '-=': conversion from 'float' to 'T', possible loss of data
           with
           [
               T=unsigned int
           ]
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(530,33): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(603,22): warning C4244: '-=': conversion from 'float' to 'T', possible loss of data
           with
           [
               T=unsigned int
           ]
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(535,50): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(604,24): warning C4244: '-=': conversion from 'float' to 'T', possible loss of data
           with
           [
               T=unsigned int
           ]
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(535,35): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(608,51): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
           with
           [
               T=unsigned int
           ]
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(555,17): warning C4305: '=': truncation from 'double' to 'float'
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(587,63): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(608,33): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+          with
+          [
+              T=unsigned int
+          ]
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(613,50): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+          with
+          [
+              T=unsigned int
+          ]
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(613,35): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+          with
+          [
+              T=unsigned int
+          ]
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(632,17): warning C4305: '=': truncation from 'double' to 'float'
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(679,63): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
           with
           [
               T=int
           ]
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(587,40): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(679,40): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
           with
           [
               T=int
           ]
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(590,31): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(614,17): warning C4305: '=': truncation from 'double' to 'float'
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(808,104): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(683,46): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
           with
           [
-              T=int
+              T=unsigned int
           ]
-          and
-          [
-              T=float
-          ]
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(808,70): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(683,32): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
           with
           [
-              T=int
+              T=unsigned int
           ]
-          and
-          [
-              T=float
-          ]
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(815,109): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(686,31): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(710,17): warning C4305: '=': truncation from 'double' to 'float'
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(771,45): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(776,45): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(790,57): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
           with
           [
-              T=int
+              T=unsigned int
           ]
-          and
-          [
-              T=float
-          ]
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(815,75): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(790,40): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
           with
           [
-              T=int
+              T=unsigned int
           ]
-          and
-          [
-              T=float
-          ]
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(822,108): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
-          with
-          [
-              T=int
-          ]
-          and
-          [
-              T=float
-          ]
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(822,74): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(982,21): warning C4305: 'initializing': truncation from 'double' to 'float'
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(1028,104): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
           with
           [
               T=int
@@ -235,8 +265,7 @@ D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(822,74
           [
               T=float
           ]
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(786,7): warning C4101: 'name': unreferenced local variable
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(872,108): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(1028,70): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
           with
           [
               T=int
@@ -245,7 +274,7 @@ D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(872,10
           [
               T=float
           ]
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(872,74): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(1035,109): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
           with
           [
               T=int
@@ -254,10 +283,58 @@ D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(872,74
           [
               T=float
           ]
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(694): warning C4715: 'checkScore': not all control paths return a value
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(719): warning C4715: 'setY': not all control paths return a value
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(845): warning C4715: 'menu': not all control paths return a value
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(888): warning C4715: 'gameover': not all control paths return a value
-D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(902): warning C4715: 'movePlayer': not all control paths return a value
-D:\Programming\term1\No man\No man's land\No man's land\pause.h(66): warning C4715: 'pause::menu': not all control paths return a value
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(1035,75): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(1042,108): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(1042,74): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(1058,22): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(1059,20): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(961,7): warning C4101: 'name': unreferenced local variable
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(1170,103): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(1170,69): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(839): warning C4715: 'checkScore': not all control paths return a value
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(864): warning C4715: 'setY': not all control paths return a value
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(1206): warning C4715: 'gameover': not all control paths return a value
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(1083): warning C4715: 'menu': not all control paths return a value
+D:\Programming\term1\No man\No man's land\No man's land\No man's land.cpp(1220): warning C4715: 'movePlayer': not all control paths return a value
+D:\Programming\term1\No man\No man's land\No man's land\pause.h(96): warning C4715: 'pause::menu': not all control paths return a value
   No man's land.vcxproj -> D:\Programming\term1\No man\No man's land\Debug\No man's land.exe
